@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyDescription.MyDescriptionFlod;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +15,21 @@ namespace MySQLiteUtile
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MyAttributeManager myAttributeManager = new MyAttributeManager();
+            List<string> listDesc = myAttributeManager.GetMyClassObject();
+            foreach (string s in listDesc)
+            {
+                listBox1.Items.Add(s);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

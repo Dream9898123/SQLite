@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bingo\Extensions\EnumerableExtension.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -53,6 +54,11 @@
     <Compile Include="MyDescriptionFlod\MyAttribute.cs" />
     <Compile Include="MyDescriptionFlod\MyAttributeManager.cs" />
     <Compile Include="MyDescriptionFlod\MyClass.cs" />
+    <Compile Include="MySQLiteFlod\DBBaseFactory.cs" />
+    <Compile Include="MySQLiteFlod\DBBaseManager.cs" />
+    <Compile Include="MySQLiteFlod\DBColumnAttribute.cs" />
+    <Compile Include="MySQLiteFlod\DBColumnItem.cs" />
+    <Compile Include="MySQLiteFlod\SQLiteHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
