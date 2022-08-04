@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace MySQLiteUtile.MySQLiteFlod
 {
     public abstract class DBBaseManager
     {
+        protected DBBaseFactory _dbBaseFactory;
         /// <summary>
         /// 用于操作数据库
         /// </summary>
@@ -85,7 +87,7 @@ namespace MySQLiteUtile.MySQLiteFlod
                 this._historyDbHelper = new SQLiteHelper(cmd);
             }
         }
-        public virtual void DbCreateTables(IEnumerable<IDbEntity> entities = null)
+        public virtual void DbCreateTables(IEnumerable<DBBaseFactory> entities = null)
         {
             entities.ForAll(t =>
             {
@@ -99,13 +101,13 @@ namespace MySQLiteUtile.MySQLiteFlod
             });
         }
 
-        public virtual void DbInsertOrUpdate(IDbEntity entity)
+        public virtual void DbInsertOrUpdate(DBBaseFactory entity)
         {
             if (this._dbHelper == null || entity == null)
                 return;
             this._dbHelper.InsertOrReplace(entity.GetType().Name, entity.GetDBColumnItems(true));
         }
-        public virtual void DbInsertOrUpdate(IEnumerable<IDbEntity> entities)
+        public virtual void DbInsertOrUpdate(IEnumerable<DBBaseFactory> entities)
         {
             if (this._dbHelper == null || entities == null || !entities.Any())
                 return;
@@ -121,7 +123,7 @@ namespace MySQLiteUtile.MySQLiteFlod
                 //LogUtil.Log(Fpi.Log.Config.MessageType.ExceptionMessage, ex.Message + "\r\n异常堆栈:\t" + ex.StackTrace);
             }
         }
-        public virtual void DbDelete(IDbEntity entity)
+        public virtual void DbDelete(DBBaseFactory entity)
         {
             if (this._dbHelper == null || entity == null)
                 return;
@@ -134,7 +136,7 @@ namespace MySQLiteUtile.MySQLiteFlod
                 this._dbHelper.Delete(entity.GetType().Name, whereColumnItem);
             }
         }
-        public virtual void DbDelete(IEnumerable<IDbEntity> entities)
+        public virtual void DbDelete(IEnumerable<DBBaseFactory> entities)
         {
             if (this._dbHelper == null || entities == null || !entities.Any())
                 return;
@@ -152,13 +154,13 @@ namespace MySQLiteUtile.MySQLiteFlod
         }
 
         //TODO由于查询条件复杂，未定义统一查询接口
-        public static List<T> DataTable2Records<T>(DataTable dt) where T : DBBaseFactory
+        public List<T> DataTable2Records<T>(DataTable dt) where T : DBBaseFactory
         {
             if (dt == null) return null;
             List<T> items = new List<T>();
             dt.Rows.OfType<DataRow>().ForAll(p =>
             {
-                var newItem = ReflectionHelper.CreateInstance(typeof(T)) as T;
+                var newItem = System.Activator.CreateInstance(typeof(T)) as T;
                 if (newItem != null)
                 {
                     newItem.SetValueFromDataRow(p);

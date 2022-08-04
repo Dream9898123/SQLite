@@ -9,7 +9,7 @@ namespace MySQLiteUtile.MySQLiteFlod
 {
     public class DBBaseFactory
     {
-        public Dictionary<string, PropertyInfo> ColumnPropertyInfoList { get; private set; }
+        private Dictionary<string, PropertyInfo> ColumnPropertyInfoList { get; set; }
 
         public virtual IEnumerable<DBColumnItem> GetDBColumnItems(bool needUpdateValue = false, Func<DBColumnItem, bool> predicate = null)
         {
@@ -49,6 +49,7 @@ namespace MySQLiteUtile.MySQLiteFlod
                 var myColumnPropertyInfoList = this.ColumnPropertyInfoList;
                 if (myColumnPropertyInfoList == null || myColumnPropertyInfoList.Count <= 0)
                     this.GetDBColumnItems();
+                myColumnPropertyInfoList = this.ColumnPropertyInfoList;
                 foreach (var dataColumn in dataRow.Table.Columns.OfType<DataColumn>())
                 {
                     if (myColumnPropertyInfoList.ContainsKey(dataColumn.ColumnName))
